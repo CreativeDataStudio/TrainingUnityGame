@@ -1,25 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
-    public GameManager gameManagerRef;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Action OnPlayerPickup;
 
     private void OnTriggerEnter(Collider other)
     {
-        gameManagerRef.AddPoints(5);
+        OnPlayerPickup.Invoke();
         Destroy(gameObject);
     }
 

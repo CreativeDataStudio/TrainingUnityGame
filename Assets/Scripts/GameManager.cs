@@ -5,9 +5,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public TMP_Text scoreLabel;
+    public float SpawnExtends;
+    public int CollectibleCount = 20;
+    public Collectible CollectiblePrefab;
+
+    public TMP_Text ScoreLabel;
 
     int score = 0;
+
+    private void Start()
+    {
+        SpawnCollectibles();
+    }
 
     public void AddPoints(int points)
     {
@@ -15,6 +24,27 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"The score is: {score}");
 
-        scoreLabel.text = $"{score} POINTS";
+        ScoreLabel.text = $"{score} POINTS";
     }
+
+    public void SpawnCollectibles()
+    {
+        for(int i = 0; i < CollectibleCount; i++)
+        {
+            float randomX = Random.Range(-SpawnExtends, SpawnExtends);
+            float randomZ = Random.Range(-SpawnExtends, SpawnExtends);
+
+            Vector3 spawnLocation = new Vector3(randomX, 0.5f, randomZ);
+
+            Collectible c = Instantiate(CollectiblePrefab, spawnLocation, Quaternion.identity);
+
+            c.OnPlayerPickup += HandlePickupCollectible;
+        }
+    }
+
+    void HandlePickupCollectible()
+    {
+        AddPoints(5);
+    }
+
 }
