@@ -1,0 +1,49 @@
+# Unity specific files
+*.mat binary
+*.anim binary
+*.controller binary
+*.prefab binary
+*.unity binary
+*.asset binary
+
+# Text files
+*.cs diff
+*.shader diff
+
+# Image files (mark as binary)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.tga binary
+*.psd binary
+
+# Audio files (mark as binary)
+*.wav binary
+*.mp3 binary
+*.ogg binary
+
+# 3D model files (mark as binary)
+*.fbx binary
+*.obj binary
+*.blend binary
+
+# Prevent Git from handling large binary files (e.g., avoiding merge conflicts)
+*.dll binary
+*.exe binary
+*.mp4 binary
+*.mov binary
+
+# Unity generated files to ignore
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+[Mm]emoryCaptures/
+*.stackdump
+
+# OSX specific files to ignore
+.DS_Store
