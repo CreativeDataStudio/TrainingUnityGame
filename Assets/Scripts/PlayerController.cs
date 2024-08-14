@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public float MovementSpeed = 10;
 
     Vector3 prevMousePos;
+    Rigidbody rigidBody;
 
     // Start is called before the first frame update
     void Start()
@@ -18,33 +19,39 @@ public class PlayerController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        rigidBody = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if(Input.GetKey(KeyCode.W))
+        Vector3 force = Vector3.zero;
+
+        // Add force based on input
+        if (Input.GetKey(KeyCode.W))
         {
-            transform.Translate(Vector3.forward * MovementSpeed * Time.deltaTime, Space.Self);
+            force += transform.forward * MovementSpeed;
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            transform.Translate(Vector3.back * MovementSpeed * Time.deltaTime, Space.Self);
+            force += -transform.forward * MovementSpeed;
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Translate(Vector3.left * MovementSpeed * Time.deltaTime, Space.Self);
+            force += -transform.right * MovementSpeed;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            transform.Translate(Vector3.right * MovementSpeed * Time.deltaTime, Space.Self);
+            force += transform.right * MovementSpeed;
         }
 
-        // Lookat direction
+        // Apply the force to the Rigidbody
+        rigidBody.AddForce(force, ForceMode.Force);
 
+        // Handle mouse look rotation
         Vector3 mouseMovement = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
 
         // Rotate pitch
@@ -58,13 +65,12 @@ public class PlayerController : MonoBehaviour
 
         cameraParent.transform.localRotation = Quaternion.Euler(newRotation, 0, 0);
 
-        //cameraParent.transform.Rotate(mouseMovement.y * -1f * MouseSensitivity * Time.deltaTime, 0, 0);
-        //cameraParent.transform.rotation.
-
-
         // Rotate Yaw
-        transform.Rotate(Vector3.up, mouseMovement.x * MouseSensitivity * Time.deltaTime, Space.World);
+        float yawRotation = mouseMovement.x * MouseSensitivity * Time.deltaTime;
+        Quaternion targetRotation = Quaternion.Euler(0, rigidBody.rotation.eulerAngles.y + yawRotation, 0);
+        rigidBody.MoveRotation(targetRotation);
 
         prevMousePos = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
     }
+
 }
